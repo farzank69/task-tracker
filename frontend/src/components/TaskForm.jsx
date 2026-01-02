@@ -183,7 +183,7 @@ const TaskForm = ({ onSubmit, editingTask = null, onCancel }) => {
           <button
             type="submit"
             disabled={!isFormValid || isSubmitting}
-            className={`flex-1 px-6 py-3 rounded font-medium text-white transition ${
+            className={`flex-1 px-6 py-3 rounded font-medium text-white transition cursor-pointer ${
               !isFormValid || isSubmitting
                 ? 'bg-gray-400 cursor-not-allowed'
                 : 'bg-blue-600 hover:bg-blue-700 active:bg-blue-800'
@@ -196,7 +196,7 @@ const TaskForm = ({ onSubmit, editingTask = null, onCancel }) => {
             <button
               type="button"
               onClick={onCancel}
-              className="px-6 py-3 rounded font-medium text-gray-700 bg-gray-200 hover:bg-gray-300 transition"
+              className="px-6 py-3 rounded font-medium text-gray-700 bg-gray-200 hover:bg-gray-300 transition cursor-pointer"
             >
               Cancel
             </button>
