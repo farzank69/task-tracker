@@ -16,7 +16,7 @@ const handleGetTasks = async (req, res) => {
         }
 
         const tasks = await Task.find(filter).sort(sortOptions);
-        res.status(200).json({success: true, data: tasks});
+        res.status(200).json({success: true, count: tasks.length, data: tasks});
     }
     catch (error) {
         res.status(500).json({success: false, message: error.message})    

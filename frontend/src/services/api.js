@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001/api';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
 
 const api = axios.create({
     baseURL: API_URL,
@@ -33,3 +33,22 @@ export const createTask = async (taskData) =>{
         throw new Error(err.response?.data?.message|| error.message || 'Failed to create task');
     }
 }
+
+export const updateTask = async (id, taskData) => {
+    try{
+        const response = await api.put(`/tasks/${id}`, taskData);
+        return response.data.data;
+    }
+    catch (err) {
+    throw new Error(err.response?.data?.message || err.message || 'Failed to update task');
+  }
+}
+
+export const deleteTask = async (id) => {
+  try {
+    const response = await api.delete(`/tasks/${id}`);
+    return response.data;
+  } catch (err) {
+    throw new Error(err.response?.data?.message || err.message || 'Failed to delete task');
+  }
+};
