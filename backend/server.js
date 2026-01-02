@@ -18,6 +18,11 @@ app.get('/', (req, res) => {
     res.json({message: "Welcome to Task Tracker API"});
 })
 
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).json({success: false, message: "Something went wrong!", error: err.message});
+})
+
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
