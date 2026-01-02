@@ -42,14 +42,14 @@ const handleCreateTask = async (req, res) => {
         if (!title || !dueDate){
             return res.status(400).json({message: "Title and Due Date are required"});
         }
-        const newTask = await new Task({
+        const task = await new Task({
             title, 
             description,
             priority,
             dueDate,
             status
         }).save();
-        res.status(201).json({success: true, message: "Task created successfully"});
+        res.status(201).json({success: true, message: "Task created successfully", data: task});
     }
     catch (error) {
         res.status(400).json({success: false, message: "Failed to create task", error: error.message});
@@ -63,7 +63,7 @@ const handleUpdateTask = async (req, res) => {
             return res.status(404).json({success: false, message: "Task not found"})
         }
         const updateTask = await Task.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
-        res.status(200).json({success: true, message: "Task updated successfully"});
+        res.status(200).json({success: true, message: "Task updated successfully", data: updateTask});
     } 
     catch (error) {
         res.status(400).json({success: false, message: "Failed to update the task"});
@@ -77,7 +77,7 @@ const handleDeleteTask = async (req, res) => {
             return res.status(404).json({success: false, message: "Task not found"})
         }
         await Task.findByIdAndDelete(req.params.id);
-        res.status(200).json({success: true, message: "Task deleted successfully"});
+        res.status(200).json({success: true, message: "Task deleted successfully", data: {}});
         }
     catch (error){
         res.status(500).json({success: false, message: "Failed to delete the task"})
