@@ -1,16 +1,39 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 const TaskForm = ({ onSubmit, editingTask = null, onCancel }) => {
   const [formData, setFormData] = useState({
-    title: editingTask?.title || '',
-    description: editingTask?.description || '',
-    priority: editingTask?.priority || 'Medium',
-    dueDate: editingTask?.dueDate ? new Date(editingTask.dueDate).toISOString().split('T')[0] : '',
-    status: editingTask?.status || 'Pending',
+    title: '',
+    description: '',
+    priority: 'Medium',
+    dueDate: '',
+    status: 'Pending',
   });
 
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  useEffect(() => {
+    if (editingTask) {
+      setFormData({
+        title: editingTask.title || '',
+        description: editingTask.description || '',
+        priority: editingTask.priority || 'Medium',
+        dueDate: editingTask.dueDate 
+          ? new Date(editingTask.dueDate).toISOString().split('T')[0] 
+          : '',
+        status: editingTask.status || 'Pending',
+      });
+    } else {
+      setFormData({
+        title: '',
+        description: '',
+        priority: 'Medium',
+        dueDate: '',
+        status: 'Pending',
+      });
+    }
+    setErrors({});
+  }, [editingTask]);
 
   const validateForm = () => {
     const newErrors = {};
@@ -41,10 +64,11 @@ const TaskForm = ({ onSubmit, editingTask = null, onCancel }) => {
     }));
     
     if (errors[name]) {
-      setErrors(prev => ({
-        ...prev,
-        [name]: ''
-      }));
+      setErrors(prev => {
+        const newErrors = { ...prev };
+        delete newErrors[name];
+        return newErrors;
+      });
     }
   };
 
@@ -68,6 +92,7 @@ const TaskForm = ({ onSubmit, editingTask = null, onCancel }) => {
           dueDate: '',
           status: 'Pending',
         });
+        setErrors({});
       }
     } catch (error) {
       console.error('Form submission error:', error);
@@ -76,8 +101,8 @@ const TaskForm = ({ onSubmit, editingTask = null, onCancel }) => {
     }
   };
 
-  const isFormValid = formData.title.trim() && formData.dueDate && Object.keys(errors).length === 0;
-
+  const isFormValid = formData.title.trim() && formData.dueDate;
+  
   return (
     <div className="bg-white rounded shadow-md p-6 mb-6">
       <h2 className="text-2xl font-bold text-gray-800 mb-4">
